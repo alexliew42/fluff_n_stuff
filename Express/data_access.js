@@ -2,8 +2,8 @@
 const {MongoClient} = require('mongodb');
 var url = "mongodb://127.0.0.1:27017/";
 const client = new MongoClient(url);
-const dbName = 'fluff';
-const collectionName = "fluff";
+const dbName = 'pet_store';
+const collectionName = "products";
 
 module.exports.call = async function call(operation, parameters, callback) {
     await client.connect();
@@ -14,8 +14,14 @@ module.exports.call = async function call(operation, parameters, callback) {
         case "findAllProducts":
             const products = await collection.find({}).toArray();
             console.log('hello')
-            console.log(products)
             callback({ products });
+            break;
+        case "findProduct":
+            const product = await collection.findOne({
+                id: parameters.id
+            })
+            console.log(parameters)
+            callback({product})
             break;
     }
   console.log("call complete: " + operation);
